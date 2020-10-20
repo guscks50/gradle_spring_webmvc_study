@@ -3,6 +3,7 @@ package gradle_spring_webmvc_study.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -16,5 +17,10 @@ public void configureDefaultServletHandling(DefaultServletHandlerConfigurer conf
   @Override
 	public void configureViewResolvers(ViewResolverRegistry registry) {
 	  registry.jsp("/WEB-INF/view/", ".jsp");
+	}
+  //컨트롤러 구현 없는 경로 매핑
+  @Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/main").setViewName("main");
 	}
 }

@@ -1,4 +1,4 @@
-package gradle_spring_webmvc_study.spring;
+package gradle_spring_webmvc_study.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gradle_spring_webmvc_study.dto.Member;
 import gradle_spring_webmvc_study.exception.MemberNotFoundException;
+import gradle_spring_webmvc_study.spring.MemberDao;
 
 @Component
 public class ChangePasswordService {
