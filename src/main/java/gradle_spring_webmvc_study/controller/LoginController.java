@@ -1,84 +1,80 @@
 package gradle_spring_webmvc_study.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import gradle_spring_webmvc_study.dto.Code;
-import gradle_spring_webmvc_study.dto.DE;
-import gradle_spring_webmvc_study.dto.Login;
+import gradle_spring_webmvc_study.dto.AuthInfo;
+import gradle_spring_webmvc_study.dto.LoginCommand;
+import gradle_spring_webmvc_study.exception.WrongIdPasswordException;
+import gradle_spring_webmvc_study.service.AuthService;
 
 @Controller
-/*@RequestMapping("/login")*/
+@RequestMapping("/login")
 public class LoginController {
-    
-    @GetMapping("/login1")
-    public String form1(Login login){
-        return "login/form";
-    }
-    @GetMapping("/login2")
-    public String form2(Login login){
-    	login.setLoginType("기업회원");
-    	login.setJobCode("B");
-    	login.setTool("Eclipse");
-    	
-        return "login/form";
-    }
-    
-    @PostMapping("/result")
-    public String result(@ModelAttribute("login") Login login){
-        return "login/result";
-    }
-    
-    @ModelAttribute("jobCodes")
-    public List<Code> getJobCodes(){
-        List<Code> jobCodes = new ArrayList<>();
-        jobCodes.add(new Code("A", "사용자"));
-        jobCodes.add(new Code("B", "개발자"));
-        jobCodes.add(new Code("C", "관리자"));
-        return jobCodes;
-    }
-    
-    @ModelAttribute("loginTypes")
-    public List<String> getLoginTypes(){
-        List<String> loginTypes = new ArrayList<>();
-        loginTypes.add("일반회원");
-        loginTypes.add("기업회원");
-        loginTypes.add("헤드헌터회원");
-        return loginTypes;
-    }
-
-    @ModelAttribute("tools")
-    public List<String> getTools(){
-        List<String> tools = new ArrayList<>();
-        tools.add("Eclipse");
-        tools.add("IntelliJ");
-        tools.add("VSCode");
-        return tools;
-    }
-    @ModelAttribute("favorites")
-    public List<String> getfavoriteOs(){
-    	List<String> favoriteOsNames = new ArrayList<>();
-    	favoriteOsNames.add("리눅스");
-    	favoriteOsNames.add("윈도우");
-    	favoriteOsNames.add("우분투");
-    	return favoriteOsNames;
-    }
-    
-    @ModelAttribute("DE")
-    public List<DE> getfavoriteOs2(){
-    	List<DE> favoriteOsNames2 = new ArrayList<>();
-    	favoriteOsNames2.add(new DE("O1","리눅스"));
-    	favoriteOsNames2.add(new DE("O2","윈도우"));
-    	favoriteOsNames2.add(new DE("O3","우분투"));
-    	return favoriteOsNames2;
-    }
+	
+	@Autowired
+	private AuthService authService;
+	@GetMapping
+	public String form(LoginCommand loginCommand) {
+	return"/login/form";
+	}
+	@PostMapping
+	public String submit(LoginCommand loginCommand, Errors errors) {
+	//new LoginCommandValidator().validate(loginCommand, errors);
+	if(errors.hasErrors())
+	return"/login/form";
+	try{
+	AuthInfo authInfo= authService.authenicate(loginCommand.getEmail(), loginCommand.getPassword());
+	//TODO세션에authInfo저장해야함
+	return"/login/loginSuccess";
+	}catch(WrongIdPasswordException ex) {
+	errors.reject("idPasswordNotMatching");
+	return"/login/form";
+	}
+	}
+	
 }
+    
+	/*
+	 * @GetMapping("/login1") public String form1(Login login){ return "login/form";
+	 * }
+	 * 
+	 * @GetMapping("/login2") public String form2(Login login){
+	 * login.setLoginType("기업회원"); login.setJobCode("B"); login.setTool("Eclipse");
+	 * 
+	 * return "login/form"; }
+	 * 
+	 * @PostMapping("/result") public String result(@ModelAttribute("login") Login
+	 * login){ return "login/result"; }
+	 * 
+	 * @ModelAttribute("jobCodes") public List<Code> getJobCodes(){ List<Code>
+	 * jobCodes = new ArrayList<>(); jobCodes.add(new Code("A", "사용자"));
+	 * jobCodes.add(new Code("B", "개발자")); jobCodes.add(new Code("C", "관리자"));
+	 * return jobCodes; }
+	 * 
+	 * @ModelAttribute("loginTypes") public List<String> getLoginTypes(){
+	 * List<String> loginTypes = new ArrayList<>(); loginTypes.add("일반회원");
+	 * loginTypes.add("기업회원"); loginTypes.add("헤드헌터회원"); return loginTypes; }
+	 * 
+	 * @ModelAttribute("tools") public List<String> getTools(){ List<String> tools =
+	 * new ArrayList<>(); tools.add("Eclipse"); tools.add("IntelliJ");
+	 * tools.add("VSCode"); return tools; }
+	 * 
+	 * @ModelAttribute("favorites") public List<String> getfavoriteOs(){
+	 * List<String> favoriteOsNames = new ArrayList<>(); favoriteOsNames.add("리눅스");
+	 * favoriteOsNames.add("윈도우"); favoriteOsNames.add("우분투"); return
+	 * favoriteOsNames; }
+	 * 
+	 * @ModelAttribute("DE") public List<DE> getfavoriteOs2(){ List<DE>
+	 * favoriteOsNames2 = new ArrayList<>(); favoriteOsNames2.add(new
+	 * DE("O1","리눅스")); favoriteOsNames2.add(new DE("O2","윈도우"));
+	 * favoriteOsNames2.add(new DE("O3","우분투")); return favoriteOsNames2; }
+	 */
+
 
 
 

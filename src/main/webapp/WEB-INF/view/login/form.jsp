@@ -1,52 +1,22 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page contentType="text/html; charset=utf-8" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+<head><title><spring:message code="login.title" /></title></head>
 <body>
-	<form:form modelAttribute="login" action="result">
-
-		<p>
-			<label for="loginType">로그인 타입</label>
-			<form:select path="loginType">
-				<option value="">-- 선택하세요</option>
-				<form:options items="${loginTypes }" />
-			</form:select>
-		</p>
-		<p>
-			<label for="jobCode">직군</label>
-			<form:select path="jobCode">
-				<option value="">-- 선택하세요</option>
-				<form:options items="${jobCodes }" itemLabel="label"
-					itemValue="code" />
-			</form:select>
-		</p>
-		<input type="submit" value="결과보기">
-	
-
-		<p>
-			<label>주로 사용하는 개발 툴</label> <form:radiobuttons items="${tools}"
-				path="tool" />
-		</p>
-		<p>
-         <label for="favorite">선호 OS : </label>
-         <form:checkboxes path="favorite" items="${favorites}" delimiter="  "/>
-      </p>
-      <p>
-         <label for="favorite">좋아하는 OS : </label>
-         <form:checkboxes path="favorite" items="${DE}" itemLabel="label" itemValue="os" delimiter="  "/>
-         
-      </p>
-	</form:form>
+<form:form modelAttribute="loginCommand">
+<form:errors />
+<p>
+<label><spring:message code="email" />:<br><form:input path="email" /><form:errors path="email"/></label>
+</p>
+<p>
+<label><spring:message code="password" />:<br><form:password path="password" /><form:errors path="password"/></label>
+</p>
+<p>
+<label><spring:message code="rememberEmail" />:<form:checkbox path="rememberEmail"/> </label>
+</p>
+<input type="submit" value="<spring:message code="login.btn" />">
+</form:form>
 </body>
 </html>
-
-
-
-

@@ -63,5 +63,10 @@ public class Member {
             throw new WrongIdPasswordException();
         this.password = newPassword;
     }
+//패스 워드 일치 여부
+    
+    public boolean matchPassword(String password) {
+    	return this.password.equals(password);
+    	}
 
 }
