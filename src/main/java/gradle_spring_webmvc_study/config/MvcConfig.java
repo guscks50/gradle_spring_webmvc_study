@@ -1,6 +1,9 @@
 package gradle_spring_webmvc_study.config;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -23,4 +26,24 @@ public void configureDefaultServletHandling(DefaultServletHandlerConfigurer conf
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/main").setViewName("main");
 	}
+  @Bean
+  public MessageSource messageSource() {
+	  ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
+	  ms.setBasename("message.label");
+	  ms.setDefaultEncoding("UTF-8");
+	  return ms;
+  }
+  
+  
+
+/**
+ * 객체를 글로벌 범위 VALIDATOR 로 사용
+ * 글로벌 범위 VALIDATOR 를 지정하면
+ * @valid 에노테이션을 사용해서 Validator를 적용
+ *
+ */
+//  @Override
+//	public Validator getValidator() {
+//		return new RegisterRequestValidator();
+//	}
 }
