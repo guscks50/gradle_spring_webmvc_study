@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>><spring:message code="login.title" /></title>
+<title><spring:message code="login.title" /></title>
 </head>
 <body>
 	<p>
