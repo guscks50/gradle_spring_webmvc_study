@@ -22,21 +22,20 @@ public class MemberRegisterService {
     }
 
     public Long regist(RegisterRequest req) {
-    	Member member = null;
-    	
-       try { member = memberDao.selectByEmail(req.getEmail());
-       			
-       if (member != null) {
-           throw new DuplicateMemberException("dup email " + req.getEmail());
-        }
-
+        Member member = null;
+        try {
+            member = memberDao.selectByEmail(req.getEmail());
+            if (member != null) {
+                throw new DuplicateMemberException("dup email " + req.getEmail());
+            }
         }catch(EmptyResultDataAccessException e) {
-        	 
+            
+        }finally {
+            member = new Member(req.getEmail(), req.getPassword(), req.getName(), LocalDateTime.now());
+            memberDao.insert(member);
         }
-      
-        Member newMember = new Member(req.getEmail(), req.getPassword(), req.getName(), LocalDateTime.now());
-        memberDao.insert(newMember);
-        return newMember.getId();
+ 
+        return member.getId();
     }
 
 }

@@ -42,13 +42,20 @@ public class RegisterController {
 	@PostMapping("/step3")
 	public String handleStep3(@Valid RegisterRequest regReq, Errors errors) {
 //		new RegisterRequestValidator().validate(regReq, errors);
-		if (errors.hasErrors())
+		if (errors.hasErrors()) {
 			return "register/step2";
+			
+		} if(!regReq.isPasswordEqualToConfirmPassword()) {
+			errors.rejectValue("confirmPassword", "nomatch");
+			return "register/step2";
+		}
+
 		try {
 			memberRegisterService.regist(regReq);
 			return "register/step3";
 		} catch (DuplicateMemberException ex) {
 			errors.rejectValue("email", "duplicate");
+
 			return "register/step2";
 		}
 	}
